@@ -1,0 +1,57 @@
+﻿<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>template</title>
+	<!-- <link rel="shortcut icon" href="favicon.ico" type="image/gif"> -->
+	<link href="css/common.css" rel="stylesheet">
+	<link href="css/scene101.css" rel="stylesheet">
+	<link href="css/scene201.css" rel="stylesheet">
+	<!--  Library [jQuery,Firebase,Pubunub] -->
+	<script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
+	<script src="https://cdn.pubnub.com/pubnub-3.16.4.min.js"></script>
+	<!-- Script -->
+	<script src="js/common.js"></script>
+	<script src="js/firebase.js"></script>
+	<script src="js/artist.js"></script>
+	<script src="js/gameobj.js"></script>
+	<script src="js/operator.js"></script>
+	<script src="js/scene101.js"></script>
+	<script src="js/scene201.js"></script>
+	<script src="js/testcode.js"></script>
+</head>
+<body>
+	<div id="base">
+		<div id="scene101" class="scene">
+			<div id="account_menu">
+				<div><button onclick="scene101.e('menu','login')">LOGIN</button><button onclick="scene101.e('menu','signup')">SIGN UP</button></div>
+			</div>
+			<div id="account_signup" class="dialog" onmousedown="scene101.e('signup','cancel')">
+				<div class="msgbox" onmousedown="eventstop(event)">
+					<div>SIGNUP</div>
+					<div><input type="text" id="signup_mail" placeholder="メールアドレス"></div>
+					<div><input type="password" id="signup_pass" placeholder="パスワード"></div>
+					<div><input type="text" id="signup_name" placeholder="なまえ"></div>
+					<div><button onclick="scene101.e('signup','button')">アカウント作成</button></div>
+				</div>
+			</div>
+			<div id="account_login" class="dialog" onmousedown="scene101.e('login','cancel')">
+				<div class="msgbox" onmousedown="eventstop(event)">
+					<div>LOGIN</div>
+					<div><input type="text" id="login_mail" placeholder="メールアドレス"></div>
+					<div><input type="password" id="login_pass" placeholder="パスワード"></div>
+					<div><button onclick="scene101.e('login','button')">ログイン</button></div>
+				</div>
+			</div>
+			<div id="stage101" class="stage"><Canvas id="canvas101" width="1280" height="720"></Canvas></div>
+		</div>
+		<div id="scene201" class="scene">
+			<div id="stage201" class="stage"><Canvas id="canvas201" width="1280" height="720"></Canvas></div>
+		</div>
+		<div id="sceneXXX" class="scene">
+			<div class="stage"><Canvas id="canvasXXX" width="1280" height="720"></Canvas></div>
+		</div>
+	</div>
+</BODY>
+</HTML>

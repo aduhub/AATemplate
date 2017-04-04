@@ -1,0 +1,49 @@
+div#scene101{
+	z-index:101;
+}
+div#account_menu{
+	z-index:99;
+	top:0px;
+	right:0px;
+	height:32px;
+	width:300px;
+	text-align:right;
+}
+div#account_menu div{
+	display:flex;
+	width:inherit;
+	justify-content:flex-end;
+	align-content:center;
+}
+div#account_menu button{
+	margin-left:4px;
+	width:120px;
+	overflow:visible;
+}
+/*Dialog set*/
+div.dialog{
+	display:none;
+	z-index:99;
+	height:inherit;
+	width:inherit;
+	background-color:rgba(0,0,0,0.1);
+}
+div.msgbox{
+	display:flex;
+	flex-wrap:wrap;
+	justify-content:flex-start;
+	align-content:center;
+	top:calc(50% - 80px);
+	left:calc(50% - 200px);
+	width:400px;
+	height:200px;
+	background-color:#ffffff;
+	user-select:text;
+}
+div.msgbox div{
+	position:static;
+	display:flex;
+	width:90%;
+	margin:1px auto 1px auto;
+	text-align:center;
+}

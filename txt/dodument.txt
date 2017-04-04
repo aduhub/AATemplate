@@ -1,0 +1,9 @@
+***ライブラリ一覧
+[scene000.js] シーン実行ファイル
+[common.js]   共通関数フォルダ
+[gameobj.js]  汎用オブジェクト
+[firebase.js] データベース処理
+[artist.js]   描画処理
+[operator.js] 処理オペレーター
+
+[operator]

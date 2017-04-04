@@ -1,0 +1,55 @@
+/*base*/
+html{
+	padding:0;
+	margin:0;
+	background-color:#dddddd;
+}
+canvas{
+	top:0px;
+	left:0px;
+}
+div{
+	display:block;
+	position:absolute;
+	top:auto;
+	left:auto;
+	overflow:hidden;
+	user-select:none;
+}
+input{
+	font-size:14px;
+	line-height:24px;
+	height:32px;
+	width:360px;
+	padding:4px;
+	margin: 0px;
+	border:solid 1px #888;
+}
+button{
+	display:inline-block;
+	font-size:14px;
+	line-height:24px;
+	height:32px;
+	width:360px;
+	margin: 0px;
+	border:solid 1px #111111;
+}
+/*ID*/
+div#base{
+	top:0px;
+	left:0px;
+	width:1280px;
+	height:720px;
+	background-color:#ffffff;
+}
+/*CLASS*/
+div.scene{
+	display:none;
+	height:inherit;
+	width:inherit;
+}
+div.stage{
+	z-index:1;
+	height:inherit;
+	width:inherit;
+}
