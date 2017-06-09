@@ -20,6 +20,7 @@ fb.f = {
 		return true;
 	},
 	//アカウント作成
+	//{mail,pass}
 	authCreate:function(arg){
 		var mail = arg.mail;
 		var pass = arg.pass;
@@ -44,6 +45,7 @@ fb.f = {
 		return true;
 	},
 	//認証処理
+	//{mail,pass}
 	authLogin:function(arg){
 		var mail = arg.mail;
 		var pass = arg.pass;
@@ -58,6 +60,7 @@ fb.f = {
 		});
 	},
 	//ディスプレイネーム設定
+	//{name}
 	updName:function(arg){
 		var user = firebase.auth().currentUser;
 		//ログイン済み
@@ -122,11 +125,11 @@ fb.q = {
 		var ref = firebase.database().ref(arg.path).push(arg.obj);
 		return ref.key;
 	},
-	//{path,obj}
+	//{path,key,data}
 	UPDATE:function(arg){
-		firebase.database().ref(arg.path).set(arg.obj);
+		firebase.database().ref(arg.path).set(arg.data);
 	},
-	//{path}
+	//{path,key}
 	DELETE:function(arg){
 		firebase.database().ref(arg.path).remove();
 	},

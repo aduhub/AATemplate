@@ -26,27 +26,28 @@ test.login = function(no) {
 //##########[ Operator ]##########
 test.ope = function(){
 	Operator.f.init();
-	Operator.f.addStack(test.ope2, "opetestdayo.");
-	Operator.f.addStack(test.ope2, "#"); //引継
-	Operator.f.addStack(test.ope2, "#");
-	Operator.f.addStack({f:test.ope2, a:"XXX"}); //dont use
+	Operator.f.addStack({fnc:test.ope2, arg:"opetestdayo."});
+	Operator.f.addStack({fnc:test.ope2, relay:true});
+	Operator.f.addStack({fnc:test.ope2, relay:true});
+	Operator.f.addStack(test.ope2);
 }
 test.ope2 = function(msg){
 	console.log(msg);
-	return msg + "men."
+	return `${msg}men.`
 }
 
 //##########[ Object ]##########
 test.gobj = function(){
-	var a = Gobj.new("a",{hp:10,st:10});
-	a.tag = "fxxk";
-	a.tag = "die";
-	var b = Gobj.new("b");
-	b.tag = "fxxk";
-	console.log(Gobj.tag("fxxk"));
-	//a.tag;
-	//a.linkfnc().linkfnc();
-	return "end";
+	var a = Gobj.new({id:"a",hp:10,st:10});
+	a.tag.add("fxxk");
+	a.tag.add("die");
+	var b = Gobj.new({id:"b"});
+	b.tag.add("big");
+	b.tag.add("fxxk");
+	console.log($G("fxxk"));
+}
+test.tagst = function(...tags){
+	return tags;
 }
 //##########[ Generator ]#########
 test.gen = function(){

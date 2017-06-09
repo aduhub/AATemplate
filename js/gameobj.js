@@ -1,24 +1,34 @@
 //汎用オブジェクト
+//Class定義
 class gobj_class {
 	//(id, {key:data})
-	constructor(id, dat){
-		this.id = id;
-		this.tags = new Set();
-		if(dat) {
-			for(let key in dat){
-				this[key] = dat[key];
+	constructor(dat){
+		this.id = (dat.id || Gobj._uniq());
+		this.tag = {
+			_dat:new Set(),
+			add(val){
+				this._dat.add(val);
+			},
+			del(val){
+				this._dat.delete(val);
+			},
+			chk(tags){
+				var res = true;
+				for(let val of tags){
+					res = (res && this._dat.has(val));
+				}
+				return res;
 			}
 		}
-	}
-	set tag(val){
-		this.tags.add(val);
-	}
-	get tag(){
-		return this.tags;
-	}
-	deltag(...vals){
-		for(var val of vals){
-			this.tags.delete(val);
+		for(let key in dat){
+			if(!["id","tag"].includes(key)){
+				this[key] = dat[key];
+			}
+			if(key == "tag"){
+				for(let val of dat.tag){
+					this.tag.add(val);
+				}
+			}
 		}
 	}
 	//test
@@ -27,53 +37,78 @@ class gobj_class {
 		return this;
 	}
 }
-//オブジェクトコントローラー
-class gobj_controller {
-	constructor(){
-		this.ids = new Set();
-		this.objs = {}
-	}
-	//新規作成
-	new(id, dat){
-		if(this.ids.has(id) == false){
-			this.ids.add(id);
-			this.objs[id] = new gobj_class(id, dat);
+//オブジェクト検索ショートカット
+//$G(#id,#id | tag,tag)
+function $G(cmdstr){
+	var cmdarr = cmdstr.split(",");
+	if(cmdstr.includes("#")){
+		if(cmdstr.includes(",")){
+			return Gobj.searchId(cmdarr);
+		}else{
+			return Gobj.searchId(cmdstr);
 		}
-		return this.objs[id];
+	}else{
+		return Gobj.searchTag(cmdarr);
 	}
-	//id検索
-	id(id){
+}
+//Object Controller
+var Gobj = {
+	ids:new Set(),
+	objs:{},
+	//新規作成
+	new(dat){
+		let gobj = new gobj_class(dat);
+		if(dat.id){
+			Gobj.ids.add(dat);
+			Gobj.objs[gobj.id] = gobj;
+		}
+		return gobj;
+	},
+	//ID検索 (ID) > OBJ
+	searchId(id){
 		if(Array.isArray(id)){
 			var rets = [];
 			for(var i=0; i<=id.length-1; i++){
-				if(this.ids.has(id[i])){
-					rets.push(this.objs[id[i]]);
+				if(Gobj.ids.has(id[i])){
+					rets.push(Gobj.objs[id[i]]);
 				}
 			}
 			return rets;
 		}else{
-			if(this.ids.has(id)){
-				return this.objs[id];
+			if(Gobj.ids.has(id)){
+				return Gobj.objs[id];
 			}else{
 				return false;
 			}
 		}
-	}
-	//tag検索
-	tag(...tags){
+	},
+	//タグAND検索 (タグ[]) > OBJ[]
+	searchTag(tags){
 		var rets = [];
-		for(let id in this.objs){
-			let cnt = 0;
-			for(let val of tags){
-				if(this.objs[id].tag.has(val)){
-					cnt++;
-				}
-			}
-			if(tags.length == cnt){
-				rets.push(this.objs[id]);
+		for(let key in Gobj.objs){
+			if(Gobj.objs[key].tag.chk(tags)){
+				rets.push(Gobj.objs[key]);
 			}
 		}
 		return rets;
+	},
+	//複製
+	copy(id1, id2){
+		let dat = {};
+		for(let[key, val] of Gobj.ids[id1]){
+			if(key!="id"){
+				dat[key] = val;
+			}
+		}
+		//
+		Gobj.new(id2, dat);
+	},
+	//UniqueID生成(文字長さ)
+	_uniq(){
+		var res = "";
+		for(let i=1; i<=8; i++){
+			res += Math.random().toString(36).slice(-1);
+		}
+		return res;
 	}
 }
-var Gobj = new gobj_controller();

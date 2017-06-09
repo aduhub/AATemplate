@@ -1,47 +1,54 @@
 var Operator = {}
 Operator.v = {
 	stack:[],
+	trash:[],
 	relay:false,
-	relay_word:"#",
 	lock:false
 }
 Operator.f = {
-	init:function(){
+	init(){
 		//Ticker
 		createjs.Ticker.setFPS(30);
 		createjs.Ticker.addEventListener("tick", Operator.f.runStack);
 	},
-	addStack:function(fnc, arg=true){
-		if(typeof fnc == "object"){
-			Operator.v.stack.push(fnc);
+	//{fnc,arg|relay,next}
+	addStack(arg){
+		if(typeof arg == "function"){
+			Operator.v.stack.push({fnc:arg, arg:true});
 		}else{
-			Operator.v.stack.push({f:fnc, a:arg});
+			Operator.v.stack.push(arg);
 		}
 	},
-	runStack:function(){
+	runStack(){
 		//check stack
-		if (!Operator.lock && Operator.v.stack.length > 0){
+		if (!Operator.v.lock && Operator.v.stack.length > 0){
 			//取り出し
 			var cmd = Operator.v.stack.shift();
 			//遅延動作
-			new Promise(function (res, rej) {
+			new Promise(function(resolve, rej) {
 				//Lock
-				Operator.lock = true;
+				Operator.v.lock = true;
 				//function check
-				if(typeof cmd.f == "function"){
+				if(typeof cmd.fnc == "function"){
 					//引数取得
-					let arg = (cmd.a==Operator.v.relay_word) ? Operator.v.relay : cmd.a;
+					let arg = (cmd.relay) ? Operator.v.relay : cmd.arg;
 					//引継用保持 = 関数実行
-					Operator.v.relay = cmd.f(arg);
+					Operator.v.relay = cmd.fnc(arg);
 				}
 				//Resolve
-				res(true);
+				resolve(true);
 			}).then(function(){
 				//UnLock
-				Operator.lock = false;
+				Operator.v.lock = false;
 				//debug
 				console.log("resolve");
+				//即時呼び出し
+				if(cmd.next){
+					Operator.f.runStack();
+				}
 			});
+			//処理済み
+			Operator.v.trash.push(cmd);
 		}
 	},
 	dummy:{}

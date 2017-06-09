@@ -2,6 +2,7 @@
 var Art = {}
 Art.cvss = {} //Canvas記憶
 Art.containers = {} //Image
+Art.ssheets = new Map();
 Art.v = {     //内部変数
 	prevCanvas:null,
 	prevLayer:null,
@@ -18,6 +19,7 @@ Art.f = {
 		createjs.Ticker.setFPS(4);
 	},
 	//Canvas追加
+	//{canvas:CanvasID,laynum:レイヤー数}
 	addCanvas:function(arg){
 		//Stage生成
 		var canvas = new createjs.Stage(arg.canvas);
@@ -51,7 +53,8 @@ Art.f = {
 		//後処理
 		Art.f.cleanup(arg);
 	},
-	//イメージ描画 {[canvas],[layer],id,x,y,img:[{src, x, y}],padding{x,y}}
+	//イメージ描画
+	//{[canvas],[layer],id,x,y,img:[{src, x, y}...],padding{x,y}}
 	addImg:function(arg){
 		var layer = Art.f.lay(arg);
 		//イメージ読み出し
@@ -220,6 +223,34 @@ Art.f = {
 		shape.graphics.lineTo(x, y + Math.floor((h-1)/2));
 		shape.graphics.lineTo(x + Math.floor((w-1)/2), y);
 		layer.addChild(shape);
+	},
+	//{src,fw,fh,ani{}}
+	preSprite:function(arg){
+		var SpriteDat = {};
+		var Anime = {};
+		SpriteDat.images = [arg.src];
+		SpriteDat.frames = {width:arg.fw, height:arg.fh, regX:0, regY:0, spacing:0, margin:0};
+		for(let [key,val] of arg.ani){
+			Anime[key] = val;
+		}
+		SpriteDat.animations = Anime;
+		var mySSheet = new createjs.SpriteSheet(SpriteDat);
+		//Spriteをストック
+		Art.ssheets.set(arg.id, mySSheet);
+	},
+	//{id,ssid,x,y}
+	addSprite(arg){
+		if(Art.v.ssheets.has(arg.ssid)){
+			//出力先
+			var layer = Art.f.lay(arg);
+			var mySprite = new createjs.Sprite(Art.v.ssheets[arg.ssid]);
+			mySprite.name = arg.id;
+			mySprite.x = arg.x;
+			mySprite.y = arg.y;
+			//レイヤーに追加
+			layer.addChild(mySprite);
+		}
+
 	},
 	//イベント追加 {[canvas],[layer],id,[act],f}
 	addEvent:function(arg){
